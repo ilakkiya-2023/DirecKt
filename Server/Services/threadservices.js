@@ -1,6 +1,7 @@
 let threads = require('../Model/threads');
 let threadreply = require("../Model/threadreply");
 let threadsreply = require('../Model/threadreply')
+let loginuser = require("../Model/loginuser")
 async function createthreads(req,res){
     let{category,email,landmark,image,bill,location,heading} = req.body;
     try{
@@ -41,39 +42,29 @@ async function createthreadsreply(req,res){
 //     }
 //   }
 
-  async function getuserthreads(req,res){
-    let {location,category} = req.body;
-    try{
-       const result = await threads.find({location:location,category:category})
-       return res.status(200).send(result)
-    }
-    catch(err){
-      return res.status(400)
-    }
+async function getuserthreads(req,res){
+  let {location,category} = req.body;
+  try{
+     const result = await threads.find({location:location,category:category})
+     return res.status(200).send(result)
   }
+  catch(err){
+    return res.status(400)
+  }
+}
 async function getreplydata(req, res) {
-    let {threads_id}=req.body;
-    console.log(threads_id);
-    try {
-      const thread = await threads
-        .findOne({ _id: threads_id })
-        .populate({
+  let { email } = req.body;
+  try {
+      const result = await threads.find({ email: email }).populate({
           path: 'threadsreply',
-          populate: [
-            // { path: 'threads_id', model: 'threads' }, // assuming 'threads' is the model for threads
-            { path: 'loginuser_id', model: 'userlogin' } // assuming 'loginuser' is the model for login users
-          ]
-        })
-        .exec();
-        // const threadreply = await threadsreply.find({
-        //   threads_id:threads_id});
-      console.log('Populated thread Data:', thread);
-      return res.status(200).json({status:"true",thread});
-    } catch (err) {
-      console.error('Error:', err);
-      return res.status(500).json({ status: "false" });
-    }
+          populate: { path: 'loginuser_id', model: 'userlogin' }
+      });
+      return res.status(200).json({ status: "true", result });
+  } catch (err) {
+      console.log(err);
+      return res.status().json({ status: "false", error: err.message });
   }
-  
+}
+
   
 module.exports={createthreads,createthreadsreply,getreplydata,getuserthreads}
