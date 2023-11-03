@@ -26,16 +26,19 @@ const CustomerThread = () => {
 
 
   const imagesListRef = ref(storage, "images/");
-    const uploadFile = () => {
-      if (imageUpload == null) return;
-      const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-      uploadBytes(imageRef, imageUpload).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((url) => {
-          console.log(url)
-          setImageUrl(url);
-        });
-      });
+  const uploadFile = async () => {
+    if (imageUpload == null) return;
+    const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+    try {
+      const snapshot = await uploadBytes(imageRef, imageUpload);
+      const url = await getDownloadURL(snapshot.ref);
+      console.log(url);
+      setImageUrl(url);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
   };
+  
   useEffect(()=>{
     try{
     const userdata = JSON.parse(localStorage.getItem('customerLogin'));
@@ -141,7 +144,7 @@ const CustomerThread = () => {
                   <option value="furniture">Furniture</option>
                   <option value="books">Books</option>
                   <option value="sports">Sports Equipment</option>
-                  <option value="medicine">Sports Equipment</option>
+                  <option value="medicine">medicine</option>
                 </select>
                   </div>
 
