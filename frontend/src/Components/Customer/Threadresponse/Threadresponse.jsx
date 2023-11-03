@@ -5,27 +5,36 @@ import {  toast } from 'react-toastify';
 const Threadresponse = () => {
 
     const [data, setData] = useState([]);
-    const [thread_id,setThread_id]=useState("");
+    const [email,setemail]=useState("");
 
     useEffect(()=>{
         try{
-        const userdata = JSON.parse(localStorage.getItem('currentThreadId'));
-        console.log(userdata.thread._id);
-        setThread_id(userdata.thread._id);
+          const fetch = async()=>{
+        const userdata = JSON.parse(localStorage.getItem('customerLogin'));
+        console.log(userdata.email);
+        setemail(userdata.email);
+          }
+        fetch();
       }
         catch(err){
           console.log(err);
         }
+      
     },[]);
 
     const fetchData = async (e) => {
         e.preventDefault();
-      
+        const formdata={
+          email:email
+        }
+
       try {
-        console.log(thread_id);
-        const response = await axios.post(`http://localhost:5000/customer/getreplydata?threads_id=${thread_id}`);
-        setData(response.data.thread.threadsreply);
-        console.log(data);
+      
+        const response = await axios.post('http://localhost:5000/customer/getreplydata',formdata);
+        console.log(response.data)
+        setData(response.data.result);
+        console.log(data)
+   
         
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -45,7 +54,7 @@ const Threadresponse = () => {
     
     <h2 style={{textAlign:"center"}}>Latest Responses</h2><br></br>
     <div className="container d-flex">
-    {
+    {/* {
       data.map((el)=>{
         return (
           <>
@@ -59,7 +68,30 @@ const Threadresponse = () => {
           </>
         )
       })
-    }
+    } */}
+    { <div>
+      {data.map((item, index) => (
+        <div key={index}>
+          
+          
+          <p>Image: {item.image}</p>
+          <p>Heading: {item.heading}</p>
+          <p>Bill: {item.bill}</p>
+          <p>Category: {item.category}</p>
+          <div>
+            <p>Threads Reply:</p>
+            {item.threadsreply.map((reply, replyIndex) => (
+              <div key={replyIndex}>
+                <p>Business name: {reply.loginuser_id.businessname}</p>
+                <p>Delivery Status: {reply.deliverystatus.toString()}</p>
+                <p>Reply Message: {reply.replymessage}</p>
+                <p>Deal: {reply.deal.toString()}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>}
     </div>
     </>
   )
