@@ -99,7 +99,7 @@ const Threadresponse = () => {
                       <div className="card-body p-4">
                           <h2 className="mb-3">{reply.loginuser_id.businessname}</h2>
                           <p className="small mb-0">Delivery Status : {reply.deliverystatus.toString()==='true'?<span style={{color:"#16FF00"}}><b>True</b></span>:<span style={{color:"red"}}><b>False</b></span>}<span className="mx-2">|</span> Reply Message: 
-                          <strong> {reply.replymessage}</strong><span className="mx-2">|</span>Deal : {reply.deal.toString()==='true'?<span style={{color:"#16FF00"}}><b>True</b></span>:<span style={{color:"red"}}><b>False</b></span>}<span className="mx-2">|</span>{reply.loginuser_id.availabilitystatus?<>Shop is opened</>:<>Shop is closed</>}</p>
+                          <strong> {reply.replymessage}</strong><span className="mx-2">|</span>Deal : {reply.deal.toString()==='true'?<span style={{color:"#16FF00"}}><b>True</b></span>:<span style={{color:"red"}}><b>False</b></span>}</p>
                         </div>
                     </div>
                   </div>

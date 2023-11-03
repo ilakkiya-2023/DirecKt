@@ -7,6 +7,7 @@ const OwnerThread = () => {
    const[location,setlocation]= useState("");
    const[userid,setUserid]=useState("");
    const[replymsg,setReplymsg]=useState("");
+   const[deliverystatus,setdeliverystaus] = useState("");
 
   useEffect(()=>{
     try{
@@ -76,10 +77,26 @@ const OwnerThread = () => {
             <div className="card" style={{width: "18rem",marginRight:"20px"}}>
               <div className="card-body">
                 <h5 className="card-title">{el.heading}</h5>
-                <p className="card-text">Location: {el.location}<br></br>Bill : {el.bill}</p>
+                <p className="card-text">Location: {el.location}<br></br>Bill : {el.bill}<br></br>Landmark: {el.landmark}</p>
+                
+                {el.image?
+                <div className="col-md-4">
+                    <img src={el.image} className="img-fluid rounded-start" alt="Image"/>
+                  </div>:<></>}
                 <div className="form-outline mb-4">
                     <label className="form-label" for="form3Example3">Reply Message</label>
                     <input type="text" id="form3Example3" className="form-control"   onChange={(e)=>setReplymsg(e.target.value)} />
+                    <select className='cpf1f2i'
+                            id="category"
+                            value={deliverystatus}
+                            onChange={(e)=>setdeliverystaus(e.target.value)}
+                            required
+                            >
+                  <option value="" disabled>Select a Category</option>
+                  <option value="1">yes</option>
+                  <option value="0">no</option>
+              
+                </select>
                 </div>
                 <a href="#" className="btn btn-danger" style={{marginRight:"10px"}}>Decline Order</a><a href="#" className="btn btn-success" onClick={()=>{ threadreply(el._id)}}>Make a deal</a>
               </div>

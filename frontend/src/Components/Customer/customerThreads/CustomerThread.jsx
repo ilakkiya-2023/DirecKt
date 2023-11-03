@@ -14,7 +14,7 @@ import { storage } from '../customerThreads/firebase';
 import { v4 } from "uuid";
 
 const CustomerThread = () => {
-  const [imageUpload, setImageUpload] = useState(null);
+ 
   const [imageUrl,setImageUrl]= useState('');
   const [location, setLocation] = useState('');
   const [email, setEmail] = useState('');
@@ -24,19 +24,20 @@ const CustomerThread = () => {
   const [category, setCategory] = useState('');
   const navigate = useNavigate();
 
+ const [imageUpload, setImageUpload] = useState(null);
+ 
 
   const imagesListRef = ref(storage, "images/");
-  const uploadFile = async () => {
+  const uploadFile = () => {
     if (imageUpload == null) return;
     const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-    try {
-      const snapshot = await uploadBytes(imageRef, imageUpload);
-      const url = await getDownloadURL(snapshot.ref);
-      console.log(url);
-      setImageUrl(url);
-    } catch (error) {
-      console.error('Error uploading file:', error);
-    }
+   
+    uploadBytes(imageRef, imageUpload).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        console.log(url)
+        setImageUrl(url)
+      });
+    });
   };
   
   useEffect(()=>{
@@ -107,7 +108,9 @@ const CustomerThread = () => {
                     <div className="col-md-6 mb-4">
                       <div className="form-outline">
                         <label className="form-label" for="form3Example2">Choose Image</label>
-                        <input type="file" id="form3Example2" className="form-control" onClick={uploadFile}/>
+                        <input type="file" id="form3Example2" className="form-control"  onChange={(event) => {
+                         setImageUpload(event.target.files[0]);
+                       }} />
                       </div>
                     </div>
                   </div>
@@ -148,7 +151,7 @@ const CustomerThread = () => {
                 </select>
                   </div>
 
-                  <button type="submit" value="Submit" className="btn btn-primary btn-block mb-4">
+                  <button type="submit" value="Submit" className="btn btn-primary btn-block mb-4" onClick={uploadFile}>
                     Create a Thread
                   </button>
 
