@@ -147,6 +147,8 @@ const Loginuser = () => {
           <option value="furniture">Furniture</option>
           <option value="books">Books</option>
           <option value="sports">Sports Equipment</option>
+          <option value="plumbing">plumbing</option>
+          <option value="medicine">medicine</option>
         
         </select>
     
